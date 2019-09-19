@@ -12,14 +12,18 @@ type node struct {
 	next  *node
 }
 
-func (sll SingleLinkedList) String() string {
+func (sll *SingleLinkedList) String() string {
 	var s string
 	n := sll.first
 	for {
 		if n == nil {
 			break
 		}
-		s = fmt.Sprintf("%v %v", s, n.value)
+		if s == "" {
+			s = fmt.Sprintf("%v", n.value)
+		} else {
+			s = fmt.Sprintf("%v %v", s, n.value)
+		}
 		n = n.next
 	}
 	return fmt.Sprintf("[%v]", s)
@@ -32,33 +36,45 @@ func NewSingleLinkedList() *SingleLinkedList {
 	}
 }
 
-func (sll SingleLinkedList) Length() int {
+func (sll *SingleLinkedList) Length() int {
 	return sll.length
 }
 
-func (sll SingleLinkedList) Append(element interface{}) {
-	newNode := &node{
+func (sll *SingleLinkedList) Append(element interface{}) {
+	newNode := node{
 		value: element,
 		next:  nil,
 	}
 
 	if sll.first == nil {
-		sll.first = newNode
-		sll.length = 1
+		sll.first = &newNode
+		sll.length++
 		return
 	}
 
-	n := sll.first.next
+	n := sll.first
 	for {
 		if n.next == nil {
-			n = newNode
+			n.next = &node{
+				value: element,
+				next:  nil,
+			}
 			sll.length++
 			return
 		}
+		n = n.next
 	}
 }
 
-func (sll SingleLinkedList) Get(index int) interface{} {
+func (sll *SingleLinkedList) Prepend(element interface{}) {
+	sll.first = &node{
+		value: element,
+		next:  sll.first,
+	}
+	sll.length++
+}
+
+func (sll *SingleLinkedList) Get(index int) interface{} {
 	n := sll.first
 	for index > 0 {
 		n = n.next
@@ -67,7 +83,7 @@ func (sll SingleLinkedList) Get(index int) interface{} {
 	return n.value
 }
 
-func (sll SingleLinkedList) Pop(index int) interface{} {
+func (sll *SingleLinkedList) Pop(index int) interface{} {
 
 	if index == 0 {
 		v := sll.first.value
@@ -92,6 +108,6 @@ func (sll SingleLinkedList) Pop(index int) interface{} {
 	return n.value
 }
 
-func (sll SingleLinkedList) Delete(index int) {
+func (sll *SingleLinkedList) Delete(index int) {
 	sll.Pop(index)
 }

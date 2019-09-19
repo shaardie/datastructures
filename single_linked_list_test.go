@@ -1,7 +1,10 @@
 package datastructures
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSingleLinkedList(t *testing.T) {
@@ -11,12 +14,21 @@ func TestSingleLinkedList(t *testing.T) {
 	}
 
 	sll := NewSingleLinkedList()
-
+	l := 1
 	for _, element := range list {
 		sll.Append(element)
-		t.Log(sll.Length())
+		assert.Equal(t, l, sll.Length(), "Length wrong")
+		l++
+	}
+	assert.Equal(t, fmt.Sprint(sll), fmt.Sprint(list))
+	for _, element := range list {
+		sll.Prepend(element)
+		assert.Equal(t, l, sll.Length(), "Length wrong")
+		l++
 	}
 
-	t.Logf("List: %v", list)
-	t.Logf("Single Linked List: %v", sll)
+	for i := 0; i < len(list); i++ {
+		assert.Equal(t, list[i], sll.Pop(10))
+		t.Logf("%v", sll)
+	}
 }
