@@ -36,34 +36,61 @@ func NewSingleLinkedList() *SingleLinkedList {
 	}
 }
 
+func NewSingleLinkedListFromList(list []interface{}) *SingleLinkedList {
+
+	// Get length of the list
+	length := len(list)
+
+	// List empty
+	if length == 0 {
+		return &SingleLinkedList{}
+	}
+
+	// Set first node
+	n := &node{value: list[0]}
+	sll := &SingleLinkedList{
+		first:  n,
+		length: length,
+	}
+
+	// Set the next node and move forward
+	for index := 1; index < length; index++ {
+		n.next = &node{
+			value: list[index],
+		}
+		n = n.next
+	}
+	return sll
+}
+
 func (sll *SingleLinkedList) Length() int {
 	return sll.length
 }
 
 func (sll *SingleLinkedList) Insert(index int, element interface{}) {
 
-	switch {
-	case index < 0:
-	case index == 0:
-	}
-
 	if index < 0 {
 		panic("index < 0")
 	}
 
 	if index == 0 {
-		sll.first = &node{value: element, next: sll.first.next}
+		sll.first = &node{value: element, next: sll.first}
 		sll.length++
 		return
 	}
 
 	n := sll.getNode(index - 1)
-	sll.insertAfter(&node{value: element}, n)
+	newNode := &node{value: element}
+	if n.next != nil {
+		newNode.next = n.next
+	}
+	n.next = newNode
+
 	sll.length++
 }
 
 func (sll *SingleLinkedList) Append(element interface{}) {
-	sll.Insert(sll.Length(), element)
+	sll.Insert(sll.length, element)
 }
 
 func (sll *SingleLinkedList) Prepend(element interface{}) {
@@ -75,39 +102,22 @@ func (sll *SingleLinkedList) Get(index int) interface{} {
 }
 
 func (sll *SingleLinkedList) Pop(index int) interface{} {
-
-	if index < 0 {
-		panic("index < 0")
-	} else if index == 0 {
+	if index == 0 {
 		v := sll.first.value
 		sll.first = sll.first.next
 		sll.length--
 		return v
 	}
 
-	n := sll.first
-	index--
-	for index != 0 {
-		n = n.next
-		index--
-	}
-
+	n := sll.getNode(index - 1)
 	v := n.next.value
 	n.next = n.next.next
 	sll.length--
-
 	return v
 }
 
 func (sll *SingleLinkedList) Delete(index int) {
 	sll.Pop(index)
-}
-
-func (sll *SingleLinkedList) insertAfter(first *node, after *node) {
-	if after != nil {
-		after.next = first.next
-	}
-	first.next = after
 }
 
 func (sll *SingleLinkedList) getNode(index int) *node {
@@ -117,4 +127,15 @@ func (sll *SingleLinkedList) getNode(index int) *node {
 		index--
 	}
 	return n
+}
+
+// Transform SingleLinkedList to a regular one
+func (sll *SingleLinkedList) toList() []interface{} {
+	list := make([]interface{}, sll.length)
+	n := sll.first
+	for index := 0; index < sll.length; index++ {
+		list[index] = n.value
+		n = n.next
+	}
+	return list
 }

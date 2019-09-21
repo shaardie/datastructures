@@ -7,34 +7,128 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSingleLinkedList(t *testing.T) {
-	list := []int{
-		1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+func TestSingleLinkedListFromListAndBack(t *testing.T) {
+	tests := []struct {
+		name string
+		list []interface{}
+	}{
+		{"empty", []interface{}{}},
+		{"single", []interface{}{0}},
+		{"multiple", []interface{}{0, 1, 2, 3, 4, 5}},
 	}
-	sll := NewSingleLinkedList()
-	for index, element := range list {
-		sll.Append(element)
-		assert.Equal(t, index+1, sll.Length(), "Length wrong")
-		t.Log(sll)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Logf("Running %v\n", tt.name)
+			assert.Equal(t, tt.list, NewSingleLinkedListFromList(tt.list).toList())
+		})
 	}
-	assert.Equal(t, fmt.Sprint(sll), fmt.Sprint(list))
-	for index, element := range list {
-		sll.Prepend(element)
-		assert.Equal(t, index+len(list), sll.Length(), "Length wrong")
-	}
+}
 
-	for i := 0; i < len(list); i++ {
-		assert.Equal(t, list[i], sll.Pop(10))
+func TestSingleLinkedListString(t *testing.T) {
+	tests := []struct {
+		name string
+		list []interface{}
+	}{
+		{"empty", []interface{}{}},
+		{"single", []interface{}{0}},
+		{"multiple", []interface{}{0, 1, 2, 3, 4, 5}},
 	}
-
-	for i := 0; i < len(list); i++ {
-		assert.Equal(t, list[9-i], sll.Get(i))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Logf("Running %v\n", tt.name)
+			assert.Equal(t,
+				fmt.Sprintf("%v", tt.list),
+				fmt.Sprintf("%v", NewSingleLinkedListFromList(tt.list)))
+		})
 	}
+}
 
-	for i := 0; i < len(list); i++ {
-		sll.Delete(0)
-		assert.Equal(t, 9-i, sll.Length())
+func TestSingleLinkedListInsert(t *testing.T) {
+	tests := []struct {
+		name    string
+		index   int
+		element interface{}
+		list    []interface{}
+		result  []interface{}
+	}{
+		{
+			"empty",
+			0,
+			1,
+			[]interface{}{},
+			[]interface{}{1},
+		},
+		{
+			"change first",
+			0,
+			1,
+			[]interface{}{2, 3, 4, 5},
+			[]interface{}{1, 2, 3, 4, 5},
+		},
+		{
+			"change somewhere",
+			2,
+			3,
+			[]interface{}{1, 2, 4, 5},
+			[]interface{}{1, 2, 3, 4, 5},
+		},
+		{
+			"change last",
+			4,
+			5,
+			[]interface{}{1, 2, 3, 4},
+			[]interface{}{1, 2, 3, 4, 5},
+		},
 	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Logf("Running %v\n", tt.name)
+			sll := NewSingleLinkedListFromList(tt.list)
+			sll.Insert(tt.index, tt.element)
+			t.Logf("New Single Linked List of size %v: %v", sll.Length(), sll)
+			assert.Equal(t, tt.result, sll.toList())
+		})
+	}
+}
 
-	assert.Panics(t, func() { sll.Pop(-1) })
+func TestSingleLinkedList_Pop(t *testing.T) {
+	tests := []struct {
+		name          string
+		index         int
+		result        interface{}
+		list          []interface{}
+		resultingList []interface{}
+	}{
+		{
+			"pop first",
+			0,
+			1,
+			[]interface{}{1, 2, 3, 4, 5},
+			[]interface{}{2, 3, 4, 5},
+		},
+		{
+			"pop somewhere",
+			2,
+			3,
+			[]interface{}{1, 2, 3, 4, 5},
+			[]interface{}{1, 2, 4, 5},
+		},
+		{
+			"pop last",
+			4,
+			5,
+			[]interface{}{1, 2, 3, 4, 5},
+			[]interface{}{1, 2, 3, 4},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Logf("Running %v\n", tt.name)
+			sll := NewSingleLinkedListFromList(tt.list)
+			r := sll.Pop(tt.index)
+			t.Logf("New Single Linked List of size %v: %v", sll.Length(), sll)
+			assert.Equal(t, tt.result, r)
+			assert.Equal(t, tt.resultingList, sll.toList())
+		})
+	}
 }
