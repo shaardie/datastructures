@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/golang:1.9
     working_directory: /go/src/github.com/shaardie/datastructures
@@ -8,3 +8,9 @@ jobs:
       - checkout
       - run: go get -v -t -d ./...
       - run: go test -v ./...
+    pre:
+      - go get github.com/mattn/goveralls
+    override:
+    - go test -v -cover -race -coverprofile=/home/ubuntu/coverage.out
+    post:
+    - /home/ubuntu/.go_workspace/bin/goveralls -coverprofile=/home/ubuntu/coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN
