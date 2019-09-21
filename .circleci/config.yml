@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.13
+      - image: circleci/golang
     steps:
       - checkout
       - run:
@@ -10,15 +10,6 @@ jobs:
           command: |
               go get -v -t -d
               go build -v
-  test:
-    docker:
-      - image: circleci/golang:1.13
-    steps:
-      - checkout
-      - run:
-          name: Run test
-          command: |
-              go get -v -t -d
               GO111MODULE=off go get github.com/mattn/goveralls
               go test -v -cover -race -coverprofile=coverage.out
               $GOPATH/bin/goveralls -coverprofile=/home/circleci/test/coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN
