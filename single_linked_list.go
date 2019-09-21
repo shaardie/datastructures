@@ -4,7 +4,11 @@ import "fmt"
 
 // SingleLinkedList is a basic implementation of a single linked list.
 //
-// For more information about this data structure take a look at https://en.wikipedia.org/wiki/Linked_list.
+// For more information about this data structure take a look at
+// https://en.wikipedia.org/wiki/Linked_list.
+//
+// There are no safeguards in this implementation, if you try to read or write
+// after the length is the behaviour undefined.
 type SingleLinkedList struct {
 	first  *node
 	length int
