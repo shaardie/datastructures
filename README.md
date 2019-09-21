@@ -12,7 +12,7 @@ This is a go library with basic datastructures.
 
 ## Documentation
 
-The documentation can be found under http://godoc.org/github.com/shaardie/set
+The documentation can be found under http://godoc.org/github.com/shaardie/datastructures
 
 ## Author
 
