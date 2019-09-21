@@ -1,6 +1,8 @@
 # Datastructures
 
 [![GoDoc](https://godoc.org/github.com/shaardie/datastructures?status.svg)](http://godoc.org/github.com/shaardie/datastructures)
+[![CircleCI](https://circleci.com/gh/shaardie/datastructures.svg?style=svg)](https://circleci.com/gh/shaardie/datastructures)
+[![Coverage Status](https://coveralls.io/repos/github/shaardie/datastructures/badge.svg)](https://coveralls.io/github/shaardie/datastructures)
 
 ## Description
 
