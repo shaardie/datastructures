@@ -10,13 +10,13 @@ import "fmt"
 // There are no safeguards in this implementation, if you try to read or write
 // after the length is the behaviour undefined.
 type SingleLinkedList struct {
-	first  *node
+	first  *singleNode
 	length int
 }
 
-type node struct {
+type singleNode struct {
 	value interface{}
-	next  *node
+	next  *singleNode
 }
 
 // String is the string representation of the single linked list.
@@ -51,14 +51,6 @@ func (sll *SingleLinkedList) String() string {
 	return fmt.Sprintf("[%v]", s)
 }
 
-// NewSingleLinkedList creates a new single linked list.
-func NewSingleLinkedList() *SingleLinkedList {
-	return &SingleLinkedList{
-		first:  nil,
-		length: 0,
-	}
-}
-
 // NewSingleLinkedListFromList creates a new single linked list from an array.
 func NewSingleLinkedListFromList(list []interface{}) *SingleLinkedList {
 	// Get length of the list
@@ -70,7 +62,7 @@ func NewSingleLinkedListFromList(list []interface{}) *SingleLinkedList {
 	}
 
 	// Set first node
-	n := &node{value: list[0]}
+	n := &singleNode{value: list[0]}
 	sll := &SingleLinkedList{
 		first:  n,
 		length: length,
@@ -78,7 +70,7 @@ func NewSingleLinkedListFromList(list []interface{}) *SingleLinkedList {
 
 	// Set the next node and move forward
 	for index := 1; index < length; index++ {
-		n.next = &node{
+		n.next = &singleNode{
 			value: list[index],
 		}
 		n = n.next
@@ -105,7 +97,7 @@ func (sll *SingleLinkedList) Insert(index int, element interface{}) {
 
 	// Insert as first element
 	if index == 0 {
-		sll.first = &node{value: element, next: sll.first}
+		sll.first = &singleNode{value: element, next: sll.first}
 		sll.length++
 		return
 	}
@@ -113,7 +105,7 @@ func (sll *SingleLinkedList) Insert(index int, element interface{}) {
 	// Get node before the place where the new node is added
 	n := sll.getNode(index - 1)
 	// New node
-	newNode := &node{value: element}
+	newNode := &singleNode{value: element}
 	// If there is a node after the index where to insert, attach it to the
 	// new node
 	if n.next != nil {
@@ -174,7 +166,7 @@ func (sll *SingleLinkedList) Delete(index int) {
 }
 
 // getNode get the node on the index `index`.
-func (sll *SingleLinkedList) getNode(index int) *node {
+func (sll *SingleLinkedList) getNode(index int) *singleNode {
 	// Get first node
 	n := sll.first
 	// Loop through nodes to find the one with index `index`
