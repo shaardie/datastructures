@@ -74,6 +74,13 @@ func TestSingleLinkedListInsert(t *testing.T) {
 		},
 		{
 			"change last",
+			3,
+			4,
+			[]interface{}{1, 2, 3, 5},
+			[]interface{}{1, 2, 3, 4, 5},
+		},
+		{
+			"change after last",
 			4,
 			5,
 			[]interface{}{1, 2, 3, 4},

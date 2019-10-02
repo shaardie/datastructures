@@ -56,29 +56,47 @@ func (dll *DoubleLinkedList) Insert(index int, element interface{}) {
 	if index < 0 {
 		panic("index < 0")
 	}
-	dll.length++
+
+	// Empty list
+	if index == 0 && index == dll.length {
+		dn := &doubleNode{
+			value: element,
+		}
+		dll.first = dn
+		dll.last = dn
+		dll.length++
+		return
+	}
+
+	// Insert as first element
 	if index == 0 {
 		dll.first = &doubleNode{
 			value: element,
 			next:  dll.first,
 		}
+		dll.first.next.previous = dll.first
+		dll.length++
 		return
 	}
+
 	if index == dll.length {
 		dll.last = &doubleNode{
 			value:    element,
 			previous: dll.last,
 		}
+		dll.last.previous.next = dll.last
+		dll.length++
 		return
 	}
-	n := dll.getNode(index)
-	previous := n.previous
+
+	n := dll.getNode(index - 1)
 	newNode := &doubleNode{
 		value:    element,
-		previous: previous,
-		next:     n,
+		previous: n,
+		next:     n.next,
 	}
-	previous.next = newNode
+	n.next = newNode
+	dll.length++
 }
 
 // NewSingleLinkedListFromList creates a new single linked list from an array.
@@ -108,7 +126,7 @@ func NewDoubleLinkedListFromList(list []interface{}) *DoubleLinkedList {
 	}
 
 	// Set last node
-	dll.last = n.next
+	dll.last = n
 
 	return dll
 }
@@ -128,23 +146,60 @@ func (dll *DoubleLinkedList) toList() []interface{} {
 }
 
 func (dll *DoubleLinkedList) getNode(index int) *doubleNode {
-	l := dll.length
-	if index < l/2 {
-		// Get first node
-		n := dll.first
-		// Loop through nodes to find the one with index `index`
-		for index > 0 {
-			n = n.next
-			index--
-		}
-		return n
-	}
-	// Get last node
-	n := dll.last
+	// Get first node
+	n := dll.first
 	// Loop through nodes to find the one with index `index`
 	for index > 0 {
-		n = n.previous
+		n = n.next
 		index--
 	}
 	return n
+}
+
+// Append a new element to the double linked list.
+func (dll *DoubleLinkedList) Append(element interface{}) {
+	dll.Insert(dll.length, element)
+}
+
+// Prepend a new element to the double linked list.
+func (dll *DoubleLinkedList) Prepend(element interface{}) {
+	dll.Insert(0, element)
+}
+
+// Get the element on the index `index`.
+func (dll *DoubleLinkedList) Get(index int) interface{} {
+	return dll.getNode(index).value
+}
+
+// Pop the element on the index `index`.
+func (dll *DoubleLinkedList) Pop(index int) interface{} {
+	// Panic if index is smaller 0
+	if index < 0 {
+		panic("index < 0")
+	}
+	// Pop first element
+	if index == 0 {
+		v := dll.first.value
+		dll.first = dll.first.next
+		dll.length--
+		return v
+	}
+	// Pop last element
+	if index == dll.length-1 {
+		v := dll.last.value
+		dll.last = dll.first.previous
+		dll.length--
+		return v
+	}
+	// Pop somewhere in between
+	node := dll.getNode(index)
+	node.next.previous, node.previous.next = node.previous, node.next
+	dll.length--
+	return node.value
+
+}
+
+// Delete the element on the index `index`.
+func (dll *DoubleLinkedList) Delete(index int) {
+	dll.Pop(index)
 }

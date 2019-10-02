@@ -89,7 +89,6 @@ func (sll *SingleLinkedList) Length() int {
 // element previously on the index `index` are moved further backwards in the
 // single linked list.
 func (sll *SingleLinkedList) Insert(index int, element interface{}) {
-
 	// Panic if index is smaller 0
 	if index < 0 {
 		panic("index < 0")
