@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSingleLinkedListFromListAndBack(t *testing.T) {
+func TestDoubleLinkedListFromListAndBack(t *testing.T) {
 	tests := []struct {
 		name string
 		list []interface{}
@@ -19,12 +19,14 @@ func TestSingleLinkedListFromListAndBack(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Logf("Running %v\n", tt.name)
-			assert.Equal(t, tt.list, NewSingleLinkedListFromList(tt.list).toList())
+			dll := NewDoubleLinkedListFromList(tt.list)
+			t.Log("asdasd")
+			assert.Equal(t, tt.list, dll.toList())
 		})
 	}
 }
 
-func TestSingleLinkedListString(t *testing.T) {
+func TestDoubleLinkedListString(t *testing.T) {
 	tests := []struct {
 		name string
 		list []interface{}
@@ -38,12 +40,12 @@ func TestSingleLinkedListString(t *testing.T) {
 			t.Logf("Running %v\n", tt.name)
 			assert.Equal(t,
 				fmt.Sprintf("%v", tt.list),
-				fmt.Sprintf("%v", NewSingleLinkedListFromList(tt.list)))
+				fmt.Sprintf("%v", NewDoubleLinkedListFromList(tt.list)))
 		})
 	}
 }
 
-func TestSingleLinkedListInsert(t *testing.T) {
+func TestDoubleLinkedListInsert(t *testing.T) {
 	tests := []struct {
 		name    string
 		index   int
@@ -90,15 +92,15 @@ func TestSingleLinkedListInsert(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Logf("Running %v\n", tt.name)
-			sll := NewSingleLinkedListFromList(tt.list)
+			sll := NewDoubleLinkedListFromList(tt.list)
 			sll.Insert(tt.index, tt.element)
-			t.Logf("New Single Linked List of size %v: %v", sll.Length(), sll)
+			t.Logf("New Double Linked List of size %v: %v", sll.Length(), sll)
 			assert.Equal(t, tt.result, sll.toList())
 		})
 	}
 }
 
-func TestSingleLinkedList_Pop(t *testing.T) {
+func TestDoubleLinkedList_Pop(t *testing.T) {
 	tests := []struct {
 		name          string
 		index         int
@@ -131,7 +133,7 @@ func TestSingleLinkedList_Pop(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Logf("Running %v\n", tt.name)
-			sll := NewSingleLinkedListFromList(tt.list)
+			sll := NewDoubleLinkedListFromList(tt.list)
 			r := sll.Pop(tt.index)
 			t.Logf("New Single Linked List of size %v: %v", sll.Length(), sll)
 			assert.Equal(t, tt.result, r)
