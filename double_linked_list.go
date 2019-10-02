@@ -2,6 +2,13 @@ package datastructures
 
 import "fmt"
 
+// DoubleLinkedList is a basic implementation of a double linked list.
+//
+// For more information about this data structure take a look at
+// https://en.wikipedia.org/wiki/Linked_list.
+//
+// There are no safeguards in this implementation, if you try to read or write
+// after the length is the behaviour undefined.
 type DoubleLinkedList struct {
 	first  *doubleNode
 	last   *doubleNode
@@ -51,6 +58,11 @@ func (dll *DoubleLinkedList) Length() int {
 	return dll.length
 }
 
+// Insert a new element into the double linked list.
+//
+// The element is inserted on the index `index` and all elements including the
+// element previously on the index `index` are moved further backwards in the
+// double linked list.
 func (dll *DoubleLinkedList) Insert(index int, element interface{}) {
 	// Panic if index is smaller 0
 	if index < 0 {
@@ -99,7 +111,7 @@ func (dll *DoubleLinkedList) Insert(index int, element interface{}) {
 	dll.length++
 }
 
-// NewSingleLinkedListFromList creates a new single linked list from an array.
+// NewDoubleLinkedListFromList creates a new double linked list from an array.
 func NewDoubleLinkedListFromList(list []interface{}) *DoubleLinkedList {
 	// Get length of the list
 	length := len(list)
